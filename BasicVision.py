@@ -1,6 +1,6 @@
 # MIT LICENSE
 #
-# Copyright 2020 Michael J. Reale
+# Copyright 2022 Michael J. Reale
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -38,6 +38,8 @@ def main():
 
     a = tf.constant("Hello Tensorflow!")
     tf.print(a)
+    print(tf.config.list_physical_devices('GPU'))
+    print(tf.reduce_sum(tf.random.normal([1000, 1000])))
 
     ###############################################################################
     # PRINT OUT VERSIONS
