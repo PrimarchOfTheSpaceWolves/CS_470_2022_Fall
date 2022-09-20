@@ -1,2 +1,6 @@
 
 \.vscode/
+*.pyc
+__pycache__/
+ground/
+input/
