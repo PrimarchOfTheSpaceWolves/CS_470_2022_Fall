@@ -31,6 +31,12 @@ from enum import Enum
 class FilterType(Enum):
     BOX = 0
     GAUSS = 1
+    MEDIAN = 2
+    LAPLACE = 3
+    SHARP_LAPLACE = 4
+    SOBEL_X = 5
+    SOBEL_Y = 6
+    GRAD_MAG = 7
 
 def filterMagic(image, filterSize, filterType):
     output = np.copy(image)
@@ -39,6 +45,38 @@ def filterMagic(image, filterSize, filterType):
         output = cv2.blur(output, (filterSize, filterSize))
     elif filterType == FilterType.GAUSS:
         output = cv2.GaussianBlur(output, (filterSize, filterSize), 0)
+    elif filterType == FilterType.MEDIAN:
+        output = cv2.medianBlur(output, filterSize)
+    elif filterType == FilterType.LAPLACE:
+        laplace = cv2.Laplacian(output, cv2.CV_32F, 
+                                ksize=filterSize, scale=0.25)
+        output = cv2.convertScaleAbs(laplace, alpha=0.5, beta=127.0)
+    elif filterType == FilterType.SHARP_LAPLACE:
+        laplace = cv2.Laplacian(output, cv2.CV_32F, 
+                                ksize=filterSize, scale=0.25)
+        fimage = output.astype("float32")
+        fimage -= laplace
+        output = cv2.convertScaleAbs(fimage)
+    elif filterType == FilterType.SOBEL_X:
+        sobelx = cv2.Sobel( output, cv2.CV_32F, 
+                            dx=1, dy=0, ksize=filterSize,
+                            scale=0.25)
+        output = cv2.convertScaleAbs(sobelx, alpha=0.5, beta=127.0)
+    elif filterType == FilterType.SOBEL_Y:
+        sobely = cv2.Sobel( output, cv2.CV_32F, 
+                            dx=0, dy=1, ksize=filterSize,
+                            scale=0.25)
+        output = cv2.convertScaleAbs(sobely, alpha=0.5, beta=127.0)
+    elif filterType == FilterType.GRAD_MAG:
+        sobelx = cv2.Sobel( output, cv2.CV_32F, 
+                            dx=1, dy=0, ksize=filterSize,
+                            scale=0.25)
+        sobely = cv2.Sobel( output, cv2.CV_32F, 
+                            dx=0, dy=1, ksize=filterSize,
+                            scale=0.25)
+        gradimage = np.absolute(sobelx) + np.absolute(sobely)
+        output = cv2.convertScaleAbs(gradimage)
+
         
     return output
 
@@ -96,7 +134,7 @@ def main():
             # Get next frame from camera
             ret, frame = camera.read()
 
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             processed = filterMagic(frame, filterSize, filterType)
 
             # Show the image
