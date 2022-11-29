@@ -170,7 +170,7 @@ def main():
 
             print("Blob cnt:", blobcnt)
             print("labels:", labels.shape, "\n", labels)
-
+            cv2.connectedComponents(image, None, 8, cv2.CV_32S)
 
             # Show the image
             cv2.imshow(windowName, frame)
