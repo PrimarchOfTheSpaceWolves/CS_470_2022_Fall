@@ -6,6 +6,7 @@ import pandas
 from tensorflow.keras.datasets import mnist
 import tensorflow.keras.utils as utils
 from sklearn.neighbors import KNeighborsClassifier, NearestCentroid
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.metrics import (accuracy_score, f1_score, 
                             roc_auc_score, confusion_matrix)
 
@@ -64,10 +65,16 @@ def main():
     print("x_train:", x_train.shape)    
     print("x_test:", x_test.shape)
 
+    # K Nearest Neighbors
     #classifier = KNeighborsClassifier(n_neighbors=3, 
     #                                    weights="uniform")
-    classifier = NearestCentroid()
-    
+    #
+    # Minimum Distance Classifier
+    #classifier = NearestCentroid()
+    #
+    # AdaBoost
+    classifier = AdaBoostClassifier(n_estimators=100, random_state=0)
+
     print("TRAINING...")
     classifier.fit(x_train, y_train)
     print("YOUR TRAINING IS COMPLETE!")
