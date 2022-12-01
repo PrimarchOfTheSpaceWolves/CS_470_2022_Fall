@@ -7,6 +7,7 @@ from tensorflow.keras.datasets import mnist
 import tensorflow.keras.utils as utils
 from sklearn.neighbors import KNeighborsClassifier, NearestCentroid
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import (accuracy_score, f1_score, 
                             roc_auc_score, confusion_matrix)
 
@@ -73,7 +74,10 @@ def main():
     #classifier = NearestCentroid()
     #
     # AdaBoost
-    classifier = AdaBoostClassifier(n_estimators=100, random_state=0)
+    #classifier = AdaBoostClassifier(n_estimators=100, random_state=0)
+    # 
+    # SVM
+    classifier = SVC(kernel="poly")
 
     print("TRAINING...")
     classifier.fit(x_train, y_train)
